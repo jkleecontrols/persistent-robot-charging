@@ -115,7 +115,7 @@ def test_min_stations_matches_legacy_opti_np():
 
 def test_load_jld_and_cli(capsys):
     pytest.importorskip("h5py")
-    path = REPO / "legacy" / "waitingtime" / "data" / "data2.jld"
+    path = REPO / "legacy" / "waitingtime" / "reduced_operation_time" / "data2.jld"
     c, f = load_jld(path)
     assert lcm([ci + fi for ci, fi in zip(c, f)]) == 4620
     assert main(["reduce-horizon", "--jld", str(path), "--eps", "0.1"]) == 0

@@ -1,19 +1,20 @@
 # Environments / caches
-opticharge/
 .venv/
 venv/
 __pycache__/
 *.pyc
+*.egg-info/
+.pytest_cache/
 .ipynb_checkpoints/
 .DS_Store
 .idea/
 .vscode/
 
-# Backup of the original git history (contained a committed venv)
-.git_old_history/
-
 # Paper sources (Overleaf export, kept locally only)
 paper/
+
+# Generated outputs (re-create with `pcsim simulate`)
+results/
 
 # Large media
 *.mp4
@@ -23,8 +24,4 @@ Subtour_Scheduling_byNitesh.ipynb
 
 # Solver licenses
 gurobi.lic
-cplex.py
-
-# Generated simulation outputs (re-create with run_simulation.py)
-results/
-*.egg-info/
+*.lic

@@ -55,7 +55,7 @@ Video export needs `ffmpeg` on `PATH`. ILPs larger than the size-limited license
 pcsim simulate                                   # Sec. VI -> results/simulation/ (--no-video for figures only)
 pcsim min-stations -c 5 5 10 15 -f 20 25 30 25   # minimum number of charging stations
 pcsim max-flight   -c 14 14 14 14 -f 20 20 20 20 -m 2
-pcsim reduce-horizon --jld legacy/waitingtime/data/data2.jld --eps 0.1
+pcsim reduce-horizon --jld legacy/waitingtime/reduced_operation_time/data2.jld --eps 0.1
 ```
 
 `pcsim simulate` runs the whole Sec. VI pipeline from the robot parameters:
