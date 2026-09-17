@@ -15,38 +15,55 @@ The formulation is generalized to **maximize robot servicing time when charging 
 
 ## Method
 
-- Times are normalized by their GCD; the schedule horizon is the LCM of per-robot cycle lengths.
-- An Integer Linear Program assigns, for every robot and time slot, whether it is charging, subject to cyclic charge/work patterns.
-- Variants: minimize charging pads (`opti.py`, `opti_np.py`), fixed pads with maximum flying time (`max_fly.py`), and a formulation without the LCM horizon (`noLCM.py`).
+- Times are normalized by their GCD; the scheduling horizon is the LCM of the robots' cycle times (Sec. III-A).
+- An ILP chooses each robot's initial cycle position r_i(0) to minimize the charging stations (Sec. III-B), or selects robots to maximize operation time on m stations (Sec. III-C).
+- Safety margins shorten operational times so the LCM horizon shrinks, via Dijkstra on candidate cycle times with LCM path cost (Sec. IV-A).
+- A tardy robot is re-scheduled by searching its feasible initial states while the other robots keep theirs (Sec. IV-B).
 
 ## Repository structure
 
 ```
-opti.py, opti_np.py          ILP: minimize number of charging pads (Gurobi)
-max_fly.py                   ILP: maximize flight time with m charging pads
-noLCM.py                     Variant without the LCM time horizon
-ILP_cplex_new.py             CPLEX version of the ILP
-Subtour_jackie.py            Subtour-elimination routing example
-Subtour_Scheduling_byJackie.ipynb
-gurobiprep.ipynb             Gurobi model prototyping
-teamOrienteeringProblem_jackie.py   TOP routing combined with charging schedule
-simulation/                  UAV charging-dock simulations and animations
-waitingtime/                 Julia (JuMP + CPLEX) waiting-time comparison studies and datasets (.jld)
+pcsim/                  Python package
+  horizon.py            LCM horizon, GCD normalization, Dijkstra-LCM (Sec. III-A, IV-A)
+  ilp.py                min-stations and max-flight ILPs, Schedule (Sec. III-B, III-C)
+  delay.py              tardy-robot re-scheduling, Eqs. 16-17 (Sec. IV-B)
+  timeline.py           slot-level execution: states, pad assignment, battery
+  routing.py            per-flight orienteering routes
+  render.py             schedule chart, snapshots, video
+  simulation.py         Sec. VI pipeline and paper checks
+  config.py             Sec. VI parameters
+  datasets.py           .jld loader
+  cli.py                `pcsim` command line
+tests/                  regression tests against Table I, Sec. VI and the legacy scripts
+legacy/                 original scripts, notebooks and Julia studies (see legacy/README.md)
+handoff/STATUS.md       work log
 ```
 
 ## Getting started
 
 ```bash
 python3 -m venv .venv && source .venv/bin/activate
-pip install -r requirements.txt
-python max_fly.py
+pip install -e ".[dev]"            # Gurobi's pip wheel includes a size-limited license
+pytest                              # checks against the published numbers
 ```
 
-The `waitingtime/` notebooks require Julia 1.10 with `JuMP`, `CPLEX`, `Plots`, and `JLD`.
+Video export needs `ffmpeg` on `PATH`. ILPs larger than the size-limited license (e.g. Table I instances) need a full Gurobi academic license.
 
-## Status
+## Usage
 
-Research code as used for the paper. A refactor (single configurable ILP module, reproducible experiment scripts) is in progress.
+```bash
+pcsim simulate                                   # Sec. VI -> results/simulation/ (--no-video for figures only)
+pcsim min-stations -c 5 5 10 15 -f 20 25 30 25   # minimum number of charging stations
+pcsim max-flight   -c 14 14 14 14 -f 20 20 20 20 -m 2
+pcsim reduce-horizon --jld legacy/waitingtime/data/data2.jld --eps 0.1
+```
+
+`pcsim simulate` runs the whole Sec. VI pipeline from the robot parameters:
+Dijkstra-LCM safety margins → max-flying-time ILP on 2 stations → re-scheduling of the delayed UAV2 →
+routing per flight → schedule chart, snapshots and video.
+It prints the published values next to the computed ones and exits non-zero if they differ.
+
+The Julia notebooks in `legacy/waitingtime/` require Julia 1.10 with `JuMP`, `CPLEX`, `Plots`, and `JLD`.
 
 ## Related work
 

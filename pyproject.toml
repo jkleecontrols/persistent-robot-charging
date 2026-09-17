@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pcsim"
+version = "0.1.0"
+description = "Persistent robot charging (RA-L 2025): scheduling ILPs, horizon reduction, delay handling, Sec. VI simulation"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy",
+    "matplotlib",
+    "gurobipy==12.0.1",
+]
+
+[project.optional-dependencies]
+data = ["h5py"]
+dev = ["pytest", "h5py"]
+
+[project.scripts]
+pcsim = "pcsim.cli:main"
+
+[tool.setuptools]
+packages = ["pcsim"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

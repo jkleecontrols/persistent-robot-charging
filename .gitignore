@@ -24,3 +24,7 @@ Subtour_Scheduling_byNitesh.ipynb
 # Solver licenses
 gurobi.lic
 cplex.py
+
+# Generated simulation outputs (re-create with run_simulation.py)
+results/
+*.egg-info/

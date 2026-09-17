@@ -1,7 +1,8 @@
+# Prefer: pip install -e ".[dev]"  (see pyproject.toml)
 numpy
-pandas
 matplotlib
-seaborn
-gurobipy   # Gurobi license required (free academic license available)
-# Optional: cplex (IBM ILOG CPLEX) for ILP_cplex_new.py
-# waitingtime/ notebooks: Julia 1.10 with JuMP, CPLEX, Plots, JLD
+gurobipy==12.0.1   # pip wheel ships a size-limited license; larger ILPs need a full academic license
+h5py               # .jld datasets in legacy/waitingtime/
+pytest
+# Video export needs ffmpeg on PATH (brew install ffmpeg)
+# legacy/ scripts additionally use pandas, seaborn, and optionally cplex
