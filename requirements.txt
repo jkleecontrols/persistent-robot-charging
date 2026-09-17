@@ -1,0 +1,7 @@
+numpy
+pandas
+matplotlib
+seaborn
+gurobipy   # Gurobi license required (free academic license available)
+# Optional: cplex (IBM ILOG CPLEX) for ILP_cplex_new.py
+# waitingtime/ notebooks: Julia 1.10 with JuMP, CPLEX, Plots, JLD
